@@ -14,7 +14,8 @@ def etcd_init():
         os.mkdir('tmp/etcd-{0}'.format(x))
         path='tmp/etcd-{0}'.format(x)
         f = open( str(path)+'/kubeadmcfg.yml' , "w")
-        template= Template("""apiVersion: kubeadm.k8s.io/v1beta2
+        template= Template(""" 
+    apiVersion: kubeadm.k8s.io/v1beta2
     kind: ClusterConfiguration
     kubernetesVersion: 1.17.3
     etcd:
