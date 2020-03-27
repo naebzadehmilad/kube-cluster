@@ -108,6 +108,20 @@ def create_playbook():
             """)
     f.write(template.render())
     f.close()
+    f = open('playbook/playbook-install-haproxy.yml', "w")
+    template = Template("""
+           - hosts: haproxy
+             remote_user: root
+             become: true
+             become_method: sudo
+             tasks:
+                - name: Transfer executable script script
+                  copy: src=../install/haproxy-nodes dest=/tmp/haproxy-nodes.sh mode=0777
+                - name: run script
+                  command: sh /tmp/haproxy-nodes.sh
+            """)
+    f.write(template.render())
+    f.close()
     f = open('install/etcd-nodes', "w")
     template = Template("""
             cat << EOF > /etc/systemd/system/kubelet.service.d/20-etcd-service-manager.conf
@@ -183,6 +197,7 @@ def create_playbook():
                             """)
     f.write(template.render())
     f.close()
+
 
 
 
