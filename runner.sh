@@ -1,2 +1,2 @@
-#!/usr/bin/python3.6
-./main.py
+#!/bin/bash
+/usr/bin/python3.6 main.py
