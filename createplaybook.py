@@ -108,6 +108,26 @@ def create_playbook():
             """)
     f.write(template.render())
     f.close()
+    f = open('playbook/playbook-disable-swap-fstab.yml', "w")
+    template = Template("""
+- name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1'
+  when: kubernetes_installed is changed
+            """)
+    f.write(template.render())
+    f.close()
+    f = open('playbook/playbook-swapoff.yml', "w")
+    template = Template("""
+- name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
+  shell: |
+    swapoff -a
+  when: kubernetes_installed is changed
+                """)
+    f.write(template.render())
+    f.close()
     f = open('playbook/playbook-install-haproxy.yml', "w")
     template = Template("""
            - hosts: haproxy
