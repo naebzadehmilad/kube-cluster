@@ -110,6 +110,10 @@ def create_playbook():
     f.close()
     f = open('playbook/playbook-disable-swap-fstab.yml', "w")
     template = Template("""
+- hosts: etcd:master:worker
+  remote_user: root
+  become: true
+  become_method: sudo
 - name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
   replace:
     path: /etc/fstab
@@ -121,6 +125,10 @@ def create_playbook():
     f.close()
     f = open('playbook/playbook-swapoff.yml', "w")
     template = Template("""
+- hosts: etcd:master:worker
+  remote_user: root
+  become: true
+  become_method: sudo
 - name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
   shell: |
     swapoff -a
