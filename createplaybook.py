@@ -114,12 +114,12 @@ def create_playbook():
   remote_user: root
   become: true
   become_method: sudo
-- name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
-  replace:
-    path: /etc/fstab
-    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
-    replace: '# \1'
-  when: kubernetes_installed is changed
+  tasks:
+    - name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
+      replace:
+      path: /etc/fstab
+      regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+      replace: '# \1'
             """)
     f.write(template.render())
     f.close()
@@ -129,10 +129,10 @@ def create_playbook():
   remote_user: root
   become: true
   become_method: sudo
-- name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
-  shell: |
-    swapoff -a
-  when: kubernetes_installed is changed
+  tasks:
+        - name: swapoff -a
+          command: |
+            swapoff -a
                 """)
     f.write(template.render())
     f.close()
