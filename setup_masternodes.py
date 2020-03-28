@@ -14,7 +14,7 @@ def masternodes_init():
     apiVersion: kubeadm.k8s.io/v1beta2
     kind: ClusterConfiguration
     kubernetesVersion: stable
-    controlPlaneEndpoint: "k8s-haproxy:6443"
+    controlPlaneEndpoint: "k8s-haproxy:6444" #default 6443
     networking:
             podSubnet: "{{podsubnet}}"
     etcd:
