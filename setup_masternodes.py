@@ -3,14 +3,15 @@ import os , fileinput
 from  jinja2 import Template
 import colorlog
 colorlog.basicConfig(level=logging.DEBUG)
-def masternodes():
+def masternodes_init():
     if os.path.exists('tmp/masterinit/'):
         os.remove('tmp/masterinit/m0.yml')
     if not os.path.exists('tmp/masterinit/'):
         os.mkdir('tmp/masterinit')
     f = open('tmp/masterinit/m0.yml', "w")
     etcdlen=len(etcd)
-    template=Template("""apiVersion: kubeadm.k8s.io/v1beta2
+    template=Template("""
+    apiVersion: kubeadm.k8s.io/v1beta2
     kind: ClusterConfiguration
     kubernetesVersion: stable
     controlPlaneEndpoint: "k8s-haproxy:6443"
@@ -40,4 +41,4 @@ def masternodes():
     os.system("ssh root@{0} 'kubeadm init --config /tmp/master0.yml --upload-certs ' ".format(masternodes[0]))
     if exit(0) :
         os.system("ssh root@{0} '   mkdir -p $HOME/.kube |   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config |   sudo chown $(id -u):$(id -g) $HOME/.kube/config ' ".format(masternodes[0]))
-masternodes()
+masternodes_init()
