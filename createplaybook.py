@@ -217,7 +217,7 @@ def create_playbook():
     f = open('install/haproxy-nodes', "w")
     template = Template("""
                  apt-get install software-properties-common -y
-                add-apt-repository ppa:vbernat/haproxy-2.1
+                add-apt-repository ppa:vbernat/haproxy-2.1 -y
                 apt-get install haproxy=2.1.\* -y
                 ap install keepalived -y
 
