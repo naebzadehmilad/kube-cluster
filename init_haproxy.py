@@ -68,8 +68,8 @@ vrrp_script chk_haproxy {
 vrrp_instance VI_1 {
     interface ens160
     state Master        # set this to BACKUP on the other machine
-    priority 101       # set this to 100 on the other machine
-    virtual_router_id 51
+    priority 103       # set this to 100 on the other machine
+    virtual_router_id 53
   
     smtp_alert          # Activate email notifications
   
@@ -96,5 +96,8 @@ vrrp_instance VI_1 {
                 os.system('scp -r tmp/haproxy/haproxy.cfg root@{0}:/etc/haproxy'.format(haproxynodes[i]))
                 os.system('scp -r tmp/haproxy/keepalived.conf root@{0}:/etc/keepalived/'.format(haproxynodes[i]))
                 logging.info('scp from tmp/haproxy/haproxy.cfg&keepalived.conf to root@{0}:/etc/haproxy && root@{0}:/etc/keepalived/'.format(haproxynodes[i]))
-
+                if lenhaproxynodes != 0 :
+                    os.system("ssh root@{0} 'sed -i 's/Master/Backup/g'' /etc/keepalived/keepalived.conf ".format(haproxynodes[i]))
+                    os.system("ssh root@{0} 'sed -i 's/102/102/g'' /etc/keepalived/keepalived.conf ".format(haproxynodes[i]))
+                os.system("ssh root@{0} 'systemctl enable haproxy keepalived && systemctl restart keepalived haproxy'".format(haproxynodes[i]))
 ha()
