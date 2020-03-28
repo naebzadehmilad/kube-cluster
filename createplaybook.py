@@ -160,7 +160,8 @@ def create_playbook():
             EOF
             
             # Reload and restart the kubelet
-            systemctl daemon-reload && systemctl restart kubelet
+            systemctl daemon-reload && systemctl restart kubelet && systemctl enable kubelet
+            
                            """)
     f.write(template.render())
     f.close()
@@ -190,6 +191,7 @@ def create_playbook():
             
             apt-get update -y && apt-get install -y kubelet kubeadm kubectl
             apt-mark hold kubelet kubeadm kubectl
+            systemctl enable kubelet
 
                            """)
     f.write(template.render())
@@ -210,7 +212,7 @@ def create_playbook():
                 mkdir -p /etc/systemd/system/docker.service.d
                 
                 # Restart docker
-                systemctl daemon-reload && systemctl restart docker
+                systemctl daemon-reload && systemctl restart docker && systemctl enable docker
                            """)
     f.write(template.render())
     f.close()
