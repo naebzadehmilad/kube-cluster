@@ -20,6 +20,7 @@ def write_conf():
         conf.write(configfile)
 def read_conf():
       conf.read('kube.cfg')
+      global podsubnet
       global etcd
       global masternodes
       global workernodes
