@@ -33,39 +33,43 @@ def hosts():
             time.sleep(1)
             if  (
                     os.system(('scp tmp/hosts root@{0}:/tmp/'.format(etcd[lenetcd]))) == 0
-                    and os.system("ssh root@{0} 'cat /tmp/hosts >> /etc/hosts'".format(etcd[lenetcd])) == 0
+                    and 
+                    os.system("ssh root@{0} 'cat /tmp/hosts >> /etc/hosts'".format(etcd[lenetcd])) == 0
 
             ):
                     logging.info('send tmp/hosts to {0} :/tmp/hosts \n'.format(etcd[lenetcd]))
             else:
                     logging.error('NOT send tmp/hosts to {0} :/tmp/hosts \n'.format(etcd[lenetcd]))
-                    break
+                
     for lenmasternodes in range(len(masternodes)):
             time.sleep(1)
             if (
                   os.system("ssh root@{0} 'cat /tmp/hosts >> /etc/hosts'".format(masternodes[lenmasternodes])) == 0
-                  and os.system('scp tmp/hosts root@{0}:/tmp/'.format(masternodes[lenmasternodes])) == 0
+                  and 
+                  os.system('scp tmp/hosts root@{0}:/tmp/'.format(masternodes[lenmasternodes])) == 0
              ):
                   logging.info('send tmp/hosts to {0} :/tmp/hosts \n'.format(masternodes[lenmasternodes]))
             else:
                   logging.error('NOT send tmp/hosts to {0} :/tmp/hosts \n'.format(masternodes[lenmasternodes]))
-                  break
+                  
     for lenworkernodes in range(len(workernodes)):
             if (
                  os.system("ssh root@{0} 'cat /tmp/hosts >> /etc/hosts'".format(workernodes[lenworkernodes])) == 0
-                 and os.system('scp tmp/hosts root@{0}:/tmp/'.format(workernodes[lenworkernodes])) == 0
+                 and 
+                 os.system('scp tmp/hosts root@{0}:/tmp/'.format(workernodes[lenworkernodes])) == 0
             ):
                 logging.info('send tmp/hosts to {0} :/tmp/hosts \n'.format(workernodes[lenworkernodes]))
             else:
-                   logging.error('NOT send tmp/hosts to {0} :/tmp/hosts \n'.format(workernodes[lenworkernodes]))
-                   break
+                logging.error('NOT send tmp/hosts to {0} :/tmp/hosts \n'.format(workernodes[lenworkernodes]))
+                   
     for lenhaproxynodes in range(len(haproxynodes)):
           if (
                   os.system("ssh root@{0} 'cat /tmp/hosts >> /etc/hosts'".format(haproxynodes[lenhaproxynodes])) == 0
-                  and os.system('scp tmp/hosts root@{0}:/tmp/'.format(haproxynodes[lenhaproxynodes])) == 0
+                  and 
+                  os.system('scp tmp/hosts root@{0}:/tmp/'.format(haproxynodes[lenhaproxynodes])) == 0
              ):
               logging.info('send tmp/hosts to {0} :/tmp/hosts \n'.format(haproxynodes[lenhaproxynodes]))
           else:
               logging.error('NOT send tmp/hosts to {0} :/tmp/hosts \n'.format(haproxynodes[lenhaproxynodes]))
-              break
+              
 hosts()
