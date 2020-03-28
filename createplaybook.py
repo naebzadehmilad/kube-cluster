@@ -25,7 +25,7 @@ def create_playbook():
       tasks:
          - name: Transfer executable script script
            copy: src=../install/etcd-nodes dest=/tmp/etcd-nodes.sh mode=0777
-         - name: run script
+         - name: install docker & k8s
            command: sh /tmp/etcd-nodes.sh   """)
     f.write(template.render())
     f.close()
@@ -46,9 +46,8 @@ def create_playbook():
           command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
         - name: Transfer executable script script3
           copy: src=../install/svc-docker  dest=/tmp/svc-docker.sh mode=0777
-        - name: run script
-          command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
-      """)
+        - name: install docker and k8s
+          command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh""")
     f.write(template.render())
     f.close()
     f = open('playbook/playbook-install-master.yml', "w")
@@ -68,7 +67,7 @@ def create_playbook():
                command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
              - name: Transfer executable script script3
                copy: src=../install/svc-docker  dest=/tmp/svc-docker.sh mode=0777
-             - name: run script
+             - name: install docker & k8s
                command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
         """)
     f.write(template.render())
@@ -86,11 +85,11 @@ def create_playbook():
                   command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
                 - name: Transfer executable script script2
                   copy: src=../install/repo-kuber  dest=/tmp/repo-kuber.sh mode=0777
-                - name: run script
+                - name: add repo docker & k8s
                   command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
                 - name: Transfer executable script script3
                   copy: src=../install/svc-docker  dest=/tmp/svc-docker.sh mode=0777
-                - name: run script
+                - name: install docker and k8s
                   command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
 
             """)
@@ -145,7 +144,7 @@ def create_playbook():
              tasks:
                 - name: Transfer executable script script
                   copy: src=../install/haproxy-nodes dest=/tmp/haproxy-nodes.sh mode=0777
-                - name: run script
+                - name: install haproxy & keepalived
                   command: sh /tmp/haproxy-nodes.sh
             """)
     f.write(template.render())
