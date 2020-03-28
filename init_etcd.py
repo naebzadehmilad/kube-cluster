@@ -43,70 +43,51 @@ def etcd_init():
              print (line.replace("initial-cluster:", res_etcd))
     if os.system("ssh root@{0} 'kubeadm init phase certs etcd-ca' ".format(etcd[0])) :
             logging.info("\nrun kubeadm init phase certs etcd-ca to etcd0-{0}\n ".format(etcd[0]))
-    else:
-        logging.error("\nrun kubeadm init phase certs etcd-ca to etcd0-{0}\n ".format(etcd[0]))
-        exit(1)
+
     if os.system('scp -r  tmp/etcd-*/ root@{0}:/tmp/'.format( etcd[0])):
         logging.info("\ncopy tmp/etcd-{0}/kubeadmcfg.yml to {0}\n ".format( etcd[0]))
-    else:
-        logging.error("\ncopy tmp/etcd-{0}/kubeadmcfg.yml to {0}\n ".format( etcd[0]))
+
     for n in range(lenetcd):
          if (
              os.system("ssh root@{1} 'kubeadm init phase certs etcd-server --config=/tmp/etcd-{0}/kubeadmcfg.yml'".format(n,etcd[0]))
          ):
             logging.info('\n kubeadm init phase certs etcd-server --config=/tmp/etcd-{0}/kubeadmcfg.yml --Done at  {0} \n '.format(etcd[0]))
-         else:
-             logging.error('\n kubeadm init phase certs etcd-server --config=/tmp/etcd-{0}/kubeadmcfg.yml --Done at  {0} \n '.format(etcd[0]))
-             exit(1)
+
          if (
          os.system("ssh root@{1} 'kubeadm init phase certs etcd-peer --config=/tmp/etcd-{0}/kubeadmcfg.yml'".format(n,etcd[0]))
          ):
             logging.info('\n kubeadm init phase certs etcd-peer --config=/tmp/etcd-{0}/kubeadmcfg.yml --Done at  {0} \n '.format(etcd[0]))
-         else:
-             logging.error('\n kubeadm init phase certs etcd-peer --config=/tmp/etcd-{0}/kubeadmcfg.yml --Done at  {0} \n '.format(etcd[0]))
-             exit(1)
+
          if(
          os.system("ssh root@{1} 'kubeadm init phase certs etcd-healthcheck-client --config=/tmp/etcd-{0}/kubeadmcfg.yml'".format(n,etcd[0]))
          ):
             logging.info('\n kubeadm init phase certs etcd-healthcheck-client --config=/tmp/etcd-{0}/kubeadmcfg.yml --Done at  {0} \n '.format(etcd[0]))
-         else:
-             logging.info('\n kubeadm init phase certs etcd-healthcheck-client --config=/tmp/etcd-{0}/kubeadmcfg.yml --Done at  {0} \n '.format(etcd[0]))
-             exit(1)
+
          if(
             os.system("ssh root@{1} 'kubeadm init phase certs apiserver-etcd-client --config=/tmp/etcd-{0}/kubeadmcfg.yml'".format(n,etcd[0]))
          ):
             logging.info('\n\n kubeadm init phase certs apiserver-etcd-client --config=/tmp/etcd-{0}/kubeadmcfg.yml --Done at  {0} \n\n '.format(etcd[0]))
-         else:
-             logging.error('\n\n kubeadm init phase certs apiserver-etcd-client --config=/tmp/etcd-{0}/kubeadmcfg.yml --Done at  {0} \n\n '.format(etcd[0]))
-             exit(1)
+
          if (
              os.system("ssh root@{1} 'cp -R /etc/kubernetes/pki/ /tmp/etcd-{0}/ '".format(n,etcd[0]))
          ):
              logging.info('\n cp -R /etc/kubernetes/pki/ /tmp/etcd-{0}/ --Done at  {0} \n '.format(etcd[0]))
-         else:
-             logging.error('\n cp -R /etc/kubernetes/pki/ /tmp/etcd-{0}/ --Done at  {0} \n '.format(etcd[0]))
-             exit(1)
+   
          if (
              os.system("ssh root@{1} 'find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete'".format(n,etcd[0]))
          ):
           logging.info('\n  find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete --Done at  {0} \n '.format(etcd[0]))
-         else:
-             logging.info( '\n  find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete --Done at  {0} \n '.format(etcd[0]))
     for j in range(lenetcd):
             if (
                     os.system("ssh  root@{2} 'scp -r  /tmp/etcd-{1}/* root@{0}:/etc/kubernetes/' ".format(etcd[j],j,etcd[0]))
             ):
                 logging.info('\n copy from /tmp/etcd-{1}/pki to {0}/etc/kubernetes/   \n '.format(etcd[j],j))
-            else:
-                logging.error('\n copy from /tmp/etcd-{1}/pki to {0}/etc/kubernetes/   \n '.format(etcd[j], j))
-                exit(1)
+     
             if (
                 os.system("ssh root@{0}  'kubeadm init phase etcd local --config=/etc/kubernetes/kubeadmcfg.yml'".format(etcd[j]))
             ):
                     logging.info("\n  ssh root@{0} 'kubeadm init phase etcd local --config=/etc/kubernetes/kubeadmcfg.yml ' \n\n\n\n ".format(etcd[j]))
-            else:
-                    logging.error("\n  ssh root@{0} 'kubeadm init phase etcd local --config=/etc/kubernetes/kubeadmcfg.yml ' \n\n\n\n ".format(etcd[j]))
-                    exit()
+          
 #     os.system('find tmp/etcd-{0}/ -name ca.key -type f -delete ; find tmp/etcd-{0}/ -name ca.key -type f -delete'.format(n))
     #     os.system('scp -r  tmp/etcd-{0}/pki root@{1}:/etc/kubernetes'.format(n,etcd[n]))
     #     os.system("ssh root@{0} 'kubeadm init phase etcd local --config=/etc/kubernetes/kubeadmcfg.yml | 'echo swapoff -a >> /root/.bashrc' ".format(etcd[n]))
