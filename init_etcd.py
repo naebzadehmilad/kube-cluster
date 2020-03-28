@@ -72,7 +72,7 @@ def etcd_init():
              os.system("ssh root@{1} 'cp -R /etc/kubernetes/pki/ /tmp/etcd-{0}/ '".format(n,etcd[0]))
          ):
              logging.info('\n cp -R /etc/kubernetes/pki/ /tmp/etcd-{0}/ --Done at  {0} \n '.format(etcd[0]))
-   
+
          if (
              os.system("ssh root@{1} 'find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete'".format(n,etcd[0]))
          ):
@@ -82,12 +82,13 @@ def etcd_init():
                     os.system("ssh  root@{2} 'scp -r  /tmp/etcd-{1}/* root@{0}:/etc/kubernetes/' ".format(etcd[j],j,etcd[0]))
             ):
                 logging.info('\n copy from /tmp/etcd-{1}/pki to {0}/etc/kubernetes/   \n '.format(etcd[j],j))
-     
+
             if (
                 os.system("ssh root@{0}  'kubeadm init phase etcd local --config=/etc/kubernetes/kubeadmcfg.yml'".format(etcd[j]))
             ):
                     logging.info("\n  ssh root@{0} 'kubeadm init phase etcd local --config=/etc/kubernetes/kubeadmcfg.yml ' \n\n\n\n ".format(etcd[j]))
-          
+
+            os.system("ssh root@{0}  'systemctl restart kubelet'".format(etcd[j]))
 #     os.system('find tmp/etcd-{0}/ -name ca.key -type f -delete ; find tmp/etcd-{0}/ -name ca.key -type f -delete'.format(n))
     #     os.system('scp -r  tmp/etcd-{0}/pki root@{1}:/etc/kubernetes'.format(n,etcd[n]))
     #     os.system("ssh root@{0} 'kubeadm init phase etcd local --config=/etc/kubernetes/kubeadmcfg.yml | 'echo swapoff -a >> /root/.bashrc' ".format(etcd[n]))
