@@ -219,7 +219,7 @@ def create_playbook():
                  apt-get install software-properties-common -y
                 add-apt-repository ppa:vbernat/haproxy-2.1 -y
                 apt-get install haproxy=2.1.\* -y
-                ap install keepalived -y
+                apt install keepalived -y
 
                             """)
     f.write(template.render())
