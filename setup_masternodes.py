@@ -40,5 +40,6 @@ def masternodes_init():
     print('\n kubeadm init --config /tmp/master0.yml --upload-certs\n')
     os.system("ssh root@{0} 'kubeadm init --config /tmp/master0.yml --upload-certs ' ".format(masternodes[0]))
     if exit(0) :
-        os.system("ssh root@{0} '   mkdir -p $HOME/.kube |   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config |   sudo chown $(id -u):$(id -g) $HOME/.kube/config ' ".format(masternodes[0]))
+        os.system("ssh root@{0} '   mkdir -p $HOME/.kube &&  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config &&   sudo chown $(id -u):$(id -g) $HOME/.kube/config ' ".format(masternodes[0]))
+        print(" run this command for install weavenet from {0} \nkubectl apply -f https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d  '\n' ".format(masternodes[0]))
 masternodes_init()
