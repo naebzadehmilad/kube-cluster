@@ -23,7 +23,7 @@ def create_playbook():
       become: true
       become_method: sudo
       tasks:
-         - name: Transfer executable script script
+         - name: Transfer executable script etcd-nodes
            copy: src=../install/etcd-nodes dest=/tmp/etcd-nodes.sh mode=0777
          - name: install docker & k8s
            command: sh /tmp/etcd-nodes.sh   """)
@@ -36,15 +36,15 @@ def create_playbook():
      become: true
      become_method: sudo
      tasks:
-        - name: Transfer executable script script
+        - name: Transfer executable script repo-docker
           copy: src=../install/repo-docker dest=/tmp/repo-docker.sh mode=0777
-        - name: run script
+        - name: run script repo-docker repo-kuber svc-docker
           command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
-        - name: Transfer executable script script2
+        - name: Transfer executable script repo-kuber
           copy: src=../install/repo-kuber  dest=/tmp/repo-kuber.sh mode=0777
-        - name: run script
+        - name: run script repo-kuber
           command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
-        - name: Transfer executable script script3
+        - name: Transfer executable script svc-docker
           copy: src=../install/svc-docker  dest=/tmp/svc-docker.sh mode=0777
         - name: install docker and k8s
           command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh""")
@@ -57,15 +57,15 @@ def create_playbook():
           become: true
           become_method: sudo
           tasks:
-             - name: Transfer executable script script
+             - name: Transfer executable script repo-docker
                copy: src=../install/repo-docker dest=/tmp/repo-docker.sh mode=0777
-             - name: run script
+             - name: run script repo-docer repo-kuber svc-docker
                command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
-             - name: Transfer executable script script2
+             - name: Transfer executable script repo-kuber
                copy: src=../install/repo-kuber  dest=/tmp/repo-kuber.sh mode=0777
-             - name: run script
+             - name: run script repo-kuber
                command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
-             - name: Transfer executable script script3
+             - name: Transfer executable script svc-docker
                copy: src=../install/svc-docker  dest=/tmp/svc-docker.sh mode=0777
              - name: install docker & k8s
                command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
@@ -79,15 +79,15 @@ def create_playbook():
              become: true
              become_method: sudo
              tasks:
-                - name: Transfer executable script script
+                - name: Transfer executable script repo-docker
                   copy: src=../install/repo-docker dest=/tmp/repo-docker.sh mode=0777
-                - name: run script
+                - name: run script repo-docker
                   command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
-                - name: Transfer executable script script2
+                - name: Transfer executable script repo-kuber
                   copy: src=../install/repo-kuber  dest=/tmp/repo-kuber.sh mode=0777
                 - name: add repo docker & k8s
                   command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
-                - name: Transfer executable script script3
+                - name: Transfer executable script svc-docker
                   copy: src=../install/svc-docker  dest=/tmp/svc-docker.sh mode=0777
                 - name: install docker and k8s
                   command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
@@ -114,11 +114,11 @@ def create_playbook():
   become: true
   become_method: sudo
   tasks:
-    - name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
-      replace:
-      path: /etc/fstab
-      regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
-      replace: '# \1'
+     - name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
+       replace:
+           path: /etc/fstab
+           regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+           replace: '# \1'
             """)
     f.write(template.render())
     f.close()
@@ -142,7 +142,7 @@ def create_playbook():
              become: true
              become_method: sudo
              tasks:
-                - name: Transfer executable script script
+                - name: Transfer executable script haproxy-nodes
                   copy: src=../install/haproxy-nodes dest=/tmp/haproxy-nodes.sh mode=0777
                 - name: install haproxy & keepalived
                   command: sh /tmp/haproxy-nodes.sh
