@@ -1,7 +1,7 @@
 from config import *
 import os  , logging
 from  jinja2 import Template
-import colorlog
+import colorlog,time
 colorlog.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s', datefmt='%H:%M:%S')
 def ha():
@@ -11,7 +11,8 @@ def ha():
         os.mkdir('tmp/haproxy')
     lenhaproxynodes=len(haproxynodes)
     f = open('tmp/haproxy/haproxy.cfg', "w")
-    template=Template("""global
+    template=Template("""
+    global
         log /dev/log    local0
         log /dev/log    local1 notice
         chroot /var/lib/haproxy
@@ -43,7 +44,7 @@ def ha():
                 balance roundrobin
                 option tcp-check
                 {% for j in range(lenhaproxynodes) %}
-                server {{ haproxynodes[j] }}:6443 check fall 3 rise 2
+                server k8sm-{{j}} {{ haproxynodes[j] }}:6443 check fall 3 rise 2
                 {% endfor %} """ )
     f.write(template.render(keepalivedip=keepalivedip,haproxynodes=haproxynodes,lenhaproxynodes=lenhaproxynodes))
     f.close()
@@ -99,5 +100,11 @@ vrrp_instance VI_1 {
                 if lenhaproxynodes != 0 :
                     os.system("ssh root@{0} 'sed -i 's/Master/Backup/g'' /etc/keepalived/keepalived.conf ".format(haproxynodes[i]))
                     os.system("ssh root@{0} 'sed -i 's/102/102/g'' /etc/keepalived/keepalived.conf ".format(haproxynodes[i]))
-                os.system("ssh root@{0} 'systemctl enable haproxy keepalived && systemctl restart keepalived haproxy'".format(haproxynodes[i]))
+                os.system("ssh root@{0} 'systemctl enable keepalived && systemctl restart keepalived '".format(haproxynodes[i]))
+                time.sleep(10)
+    for j in range(lenhaproxynodes):
+        logging.info('virtualip test')
+        os.system("ssh root@{0} 'ping -c1 {1}'".format(haproxynodes[j],keepalivedip))
+        os.system('ssh root@{0} "systemctl enable haproxy && systemctl restart haproxy  " '.format(haproxynodes[j]))
+
 ha()
