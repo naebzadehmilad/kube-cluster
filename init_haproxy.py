@@ -93,10 +93,8 @@ vrrp_instance VI_1 {
     f.write(template.render(keepalivedip=keepalivedip,haproxynodes=haproxynodes,lenhaproxynodes=lenhaproxynodes))
     f.close()
     for i in range(lenhaproxynodes):
-        if (
                 os.system('scp -r tmp/haproxy/haproxy.cfg root@{0}:/etc/haproxy'.format(haproxynodes[i]))
-                and os.system('scp -r tmp/haproxy/keepalived.conf root@{0}:/etc/keepalived/'.format(haproxynodes[i]))
-        ):
-            logging.info('scp from tmp/haproxy/haproxy.cfg&keepalived.conf to root@{0}:/etc/haproxy && root@{0}:/etc/keepalived/'.format(haproxynodes[i]))
-        
+                os.system('scp -r tmp/haproxy/keepalived.conf root@{0}:/etc/keepalived/'.format(haproxynodes[i]))
+                logging.info('scp from tmp/haproxy/haproxy.cfg&keepalived.conf to root@{0}:/etc/haproxy && root@{0}:/etc/keepalived/'.format(haproxynodes[i]))
+
 ha()
