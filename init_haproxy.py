@@ -98,7 +98,5 @@ vrrp_instance VI_1 {
                 and os.system('scp -r tmp/haproxy/keepalived.conf root@{0}:/etc/keepalived/'.format(haproxynodes[i]))
         ):
             logging.info('scp from tmp/haproxy/haproxy.cfg&keepalived.conf to root@{0}:/etc/haproxy && root@{0}:/etc/keepalived/'.format(haproxynodes[i]))
-        else:
-            logging.error('not sent files to haproxynodes ')
-            break
+        
 ha()
