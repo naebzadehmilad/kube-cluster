@@ -59,7 +59,7 @@ def create_playbook():
           tasks:
              - name: Transfer executable script repo-docker
                copy: src=../install/repo-docker dest=/tmp/repo-docker.sh mode=0777
-             - name: run script repo-docer repo-kuber svc-docker
+             - name: run script repo-docker repo-kuber svc-docker
                command: sh /tmp/repo-docker.sh && ssh /tmp/repo-kuber.sh && ssh /tmp/svc-docker.sh
              - name: Transfer executable script repo-kuber
                copy: src=../install/repo-kuber  dest=/tmp/repo-kuber.sh mode=0777
